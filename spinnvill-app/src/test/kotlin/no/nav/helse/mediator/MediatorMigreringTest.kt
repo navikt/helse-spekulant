@@ -2,11 +2,11 @@
 
 package no.nav.helse.mediator
 
+import Avviksvurderingkilde
 import no.nav.helse.VersjonAvKode
 import no.nav.helse.db.TestDatabase
 import no.nav.helse.dto.AvviksvurderingDto
 import no.nav.helse.helpers.januar
-import no.nav.helse.kafka.Avviksvurderingkilde
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.helse.somFnr
 import org.intellij.lang.annotations.Language

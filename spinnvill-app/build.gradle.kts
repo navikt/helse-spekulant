@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":spinnvill-db"))
     implementation(project(":spinnvill-avviksvurdering"))
     implementation(project(":spinnvill-felles"))
+    implementation(project(":spinnvill-kafka"))
 
     implementation("com.github.navikt:rapids-and-rivers:$rapidsAndRiversVersion")
 

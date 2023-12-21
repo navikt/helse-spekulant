@@ -1,7 +1,5 @@
 @file:Suppress("SameParameterValue")
 
-package no.nav.helse.kafka
-
 import com.fasterxml.jackson.databind.node.ObjectNode
 import no.nav.helse.helpers.januar
 import no.nav.helse.rapids_rivers.testsupport.TestRapid

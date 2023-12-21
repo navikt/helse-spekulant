@@ -1,8 +1,6 @@
-package no.nav.helse.kafka
-
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class AvviksvurderingFraSpleisRiverTest {
@@ -28,7 +26,7 @@ class AvviksvurderingFraSpleisRiverTest {
     @Test
     fun `kan lese en avviksvurdering fra Spleis`() {
         testRapid.sendTestMessage(avviksprosentBeregnetEvent)
-        assertEquals(1, messageHandler.håndterteAvviksvurderinger)
+        Assertions.assertEquals(1, messageHandler.håndterteAvviksvurderinger)
     }
 
     @Language("JSON")

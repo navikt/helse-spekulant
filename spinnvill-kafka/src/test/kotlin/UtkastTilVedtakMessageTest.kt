@@ -1,12 +1,7 @@
-@file:Suppress("SameParameterValue")
-
-package no.nav.helse.kafka
-
 import no.nav.helse.helpers.januar
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
@@ -41,8 +36,8 @@ class UtkastTilVedtakMessageTest {
 
         val melding = messageHandler.messages.first()
 
-        assertNull(melding.toJson()["behandlingStartet"])
-        assertEquals(true, melding.finalize()["behandlingStartet"])
+        Assertions.assertNull(melding.toJson()["behandlingStartet"])
+        Assertions.assertEquals(true, melding.finalize()["behandlingStartet"])
     }
 
     private fun utkastTilVedtakJson(

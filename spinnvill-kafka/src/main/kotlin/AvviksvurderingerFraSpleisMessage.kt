@@ -1,8 +1,6 @@
-package no.nav.helse.kafka
-
 import no.nav.helse.Arbeidsgiverreferanse
 import no.nav.helse.OmregnetÅrsinntekt
-import no.nav.helse.kafka.Avviksvurderingkilde.SPLEIS
+import Avviksvurderingkilde.SPLEIS
 import no.nav.helse.rapids_rivers.*
 import no.nav.helse.somArbeidsgiverref
 import no.nav.helse.somFnr
@@ -12,8 +10,8 @@ import java.time.YearMonth
 import java.util.*
 
 class AvviksvurderingerFraSpleisMessage(packet: JsonMessage) {
-    internal val fødselsnummer = packet["fødselsnummer"].asText().somFnr()
-    internal val avviksvurderinger: List<AvviksvurderingFraSpleis> = packet["skjæringstidspunkter"].map { avviksvurdering ->
+    val fødselsnummer = packet["fødselsnummer"].asText().somFnr()
+    val avviksvurderinger: List<AvviksvurderingFraSpleis> = packet["skjæringstidspunkter"].map { avviksvurdering ->
         AvviksvurderingFraSpleis(
             skjæringstidspunkt = avviksvurdering["skjæringstidspunkt"].asLocalDate(),
             vurderingstidspunkt = avviksvurdering["vurderingstidspunkt"].asLocalDateTime(),
@@ -45,8 +43,8 @@ class AvviksvurderingerFraSpleisMessage(packet: JsonMessage) {
 }
 
 class EnAvviksvurderingFraSpleisMessage(packet: JsonMessage) {
-    internal val fødselsnummer = packet["fødselsnummer"].asText().somFnr()
-    internal val avviksvurdering = AvviksvurderingFraSpleis(
+    val fødselsnummer = packet["fødselsnummer"].asText().somFnr()
+    val avviksvurdering = AvviksvurderingFraSpleis(
         skjæringstidspunkt = packet["skjæringstidspunkt"].asLocalDate(),
         vurderingstidspunkt = packet["vurderingstidspunkt"].asLocalDateTime(),
         kilde = SPLEIS,

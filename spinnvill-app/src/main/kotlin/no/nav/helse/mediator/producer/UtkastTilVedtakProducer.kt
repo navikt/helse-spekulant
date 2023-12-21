@@ -1,9 +1,9 @@
 package no.nav.helse.mediator.producer
 
+import UtkastTilVedtakMessage
 import no.nav.helse.Fødselsnummer
 import no.nav.helse.avviksvurdering.Avviksvurdering
 import no.nav.helse.avviksvurdering.Visitor
-import no.nav.helse.kafka.UtkastTilVedtakMessage
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*

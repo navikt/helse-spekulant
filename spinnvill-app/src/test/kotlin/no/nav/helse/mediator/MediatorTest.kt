@@ -11,7 +11,6 @@ import no.nav.helse.helpers.ToggleHelpers.disable
 import no.nav.helse.helpers.ToggleHelpers.enable
 import no.nav.helse.helpers.januar
 import no.nav.helse.helpers.objectMapper
-import no.nav.helse.kafka.asUUID
 import no.nav.helse.rapids_rivers.asLocalDate
 import no.nav.helse.rapids_rivers.asYearMonth
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
@@ -328,7 +327,7 @@ internal class MediatorTest {
             .filter { it.path("@behov").map(JsonNode::asText).containsAll(listOf(behov)) }
 
     private fun TestRapid.RapidInspector.assertGodkjenningsbehovHarAvviksvurderingId(id: UUID) =
-        assertEquals(id, behov("Godkjenning").single()["avviksvurderingId"].asUUID())
+        assertEquals(id, UUID.fromString(behov("Godkjenning").single()["avviksvurderingId"].asText()))
 
     private fun avviksvurderingFraSpleisUtenSammenligningsgrunnlagJson(
         aktørId: String,

@@ -1,9 +1,4 @@
-@file:Suppress("SameParameterValue")
-
-package no.nav.helse.kafka
-
 import no.nav.helse.helpers.januar
-import no.nav.helse.helpers.objectMapper
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test

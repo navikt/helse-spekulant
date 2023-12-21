@@ -1,11 +1,21 @@
 package no.nav.helse.mediator
 
+import AvviksvurderingFraSpleis
+import AvviksvurderingFraSpleisRiver
+import AvviksvurderingerFraSpleisMessage
+import AvviksvurderingerFraSpleisRiver
+import Avviksvurderingkilde
+import EnAvviksvurderingFraSpleisMessage
+import MessageHandler
+import SammenligningsgrunnlagMessage
+import SammenligningsgrunnlagRiver
+import UtkastTilVedtakMessage
+import UtkastTilVedtakRiver
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.helse.*
 import no.nav.helse.avviksvurdering.*
 import no.nav.helse.db.Database
 import no.nav.helse.dto.AvviksvurderingDto
-import no.nav.helse.kafka.*
 import no.nav.helse.mediator.producer.*
 import no.nav.helse.rapids_rivers.RapidsConnection
 import org.slf4j.LoggerFactory
@@ -17,7 +27,7 @@ import java.util.*
 class Mediator(
     private val versjonAvKode: VersjonAvKode,
     private val rapidsConnection: RapidsConnection,
-    private val database: Database
+    private val database: Database,
 ) : MessageHandler {
 
     init {
@@ -32,7 +42,11 @@ class Mediator(
         val fødselsnummer = enAvviksvurderingFraSpleisMessage.fødselsnummer
         val meldingProducer = MigrerteAvviksvurderingerProducer(fødselsnummer, rapidsConnection)
 
-        lagreOgVideresendAvviksvurdering(fødselsnummer, enAvviksvurderingFraSpleisMessage.avviksvurdering, meldingProducer)
+        lagreOgVideresendAvviksvurdering(
+            fødselsnummer,
+            enAvviksvurderingFraSpleisMessage.avviksvurdering,
+            meldingProducer
+        )
         meldingProducer.publiserMeldinger()
         sikkerlogg.info("Avviksvurdering fra Spleis ferdigbehandlet")
     }
@@ -70,7 +84,13 @@ class Mediator(
         val avvikVurdertProducer = AvvikVurdertProducer(vilkårsgrunnlagId = utkastTilVedtakMessage.vilkårsgrunnlagId)
         val utkastTilVedtakProducer = UtkastTilVedtakProducer(utkastTilVedtakMessage)
 
-        meldingProducer.nyProducer(behovProducer, varselProducer, subsumsjonProducer, avvikVurdertProducer, utkastTilVedtakProducer)
+        meldingProducer.nyProducer(
+            behovProducer,
+            varselProducer,
+            subsumsjonProducer,
+            avvikVurdertProducer,
+            utkastTilVedtakProducer
+        )
 
         val beregningsgrunnlag = nyttBeregningsgrunnlag(utkastTilVedtakMessage)
         val avviksvurdering = finnAvviksvurdering(
@@ -80,12 +100,28 @@ class Mediator(
             ?.vurderBehovForNyVurdering(beregningsgrunnlag)
 
         if (avviksvurdering == null) {
-            logg.info("Trenger sammenligningsgrunnlag, {}", kv("vedtaksperiodeId", utkastTilVedtakMessage.vedtaksperiodeId))
+            logg.info(
+                "Trenger sammenligningsgrunnlag, {}",
+                kv("vedtaksperiodeId", utkastTilVedtakMessage.vedtaksperiodeId)
+            )
             beOmSammenligningsgrunnlag(utkastTilVedtakMessage.skjæringstidspunkt, behovProducer)
         } else {
-            logg.info("Har sammenligningsgrunnlag, vurderer behov for ny avviksvurdering, {}", kv("vedtaksperiodeId", utkastTilVedtakMessage.vedtaksperiodeId))
-            håndter(beregningsgrunnlag, avviksvurdering, utkastTilVedtakProducer, varselProducer, subsumsjonProducer, avvikVurdertProducer)
-            logg.info("Utkast til vedtak ferdig behandlet, {}", kv("vedtaksperiodeId", utkastTilVedtakMessage.vedtaksperiodeId))
+            logg.info(
+                "Har sammenligningsgrunnlag, vurderer behov for ny avviksvurdering, {}",
+                kv("vedtaksperiodeId", utkastTilVedtakMessage.vedtaksperiodeId)
+            )
+            håndter(
+                beregningsgrunnlag,
+                avviksvurdering,
+                utkastTilVedtakProducer,
+                varselProducer,
+                subsumsjonProducer,
+                avvikVurdertProducer
+            )
+            logg.info(
+                "Utkast til vedtak ferdig behandlet, {}",
+                kv("vedtaksperiodeId", utkastTilVedtakMessage.vedtaksperiodeId)
+            )
         }
         meldingProducer.publiserMeldinger()
     }
@@ -122,7 +158,10 @@ class Mediator(
         sikkerlogg.info("Spinnvill er i lesemodus")
         val utkastTilVedtakProducer = UtkastTilVedtakProducer(utkastTilVedtakMessage)
         meldingProducer.nyProducer(utkastTilVedtakProducer)
-        val avviksvurdering = database.finnSisteAvviksvurdering(utkastTilVedtakMessage.fødselsnummer.somFnr(), utkastTilVedtakMessage.skjæringstidspunkt)
+        val avviksvurdering = database.finnSisteAvviksvurdering(
+            utkastTilVedtakMessage.fødselsnummer.somFnr(),
+            utkastTilVedtakMessage.skjæringstidspunkt
+        )
         if (avviksvurdering != null) {
             utkastTilVedtakProducer.registrerUtkastForUtsending(avviksvurdering.tilDomene())
             meldingProducer.publiserMeldinger()
@@ -133,7 +172,7 @@ class Mediator(
     private fun lagreOgVideresendAvviksvurdering(
         fødselsnummer: Fødselsnummer,
         avviksvurdering: AvviksvurderingFraSpleis,
-        meldingProducer: MigrerteAvviksvurderingerProducer
+        meldingProducer: MigrerteAvviksvurderingerProducer,
     ) {
         if (database.harAvviksvurderingAllerede(fødselsnummer, avviksvurdering.vilkårsgrunnlagId)) return
 
@@ -145,7 +184,11 @@ class Mediator(
         // inngangsvilkårene er vurdert i Infotrygd
         if (avviksvurdering.kilde == Avviksvurderingkilde.INFOTRYGD) return
 
-        meldingProducer.nyAvviksvurdering(avviksvurdering.vilkårsgrunnlagId, avviksvurdering.skjæringstidspunkt, avviksvurdering.tilKafkaDto())
+        meldingProducer.nyAvviksvurdering(
+            avviksvurdering.vilkårsgrunnlagId,
+            avviksvurdering.skjæringstidspunkt,
+            avviksvurdering.tilKafkaDto()
+        )
     }
 
     private fun håndter(
