@@ -1,9 +1,9 @@
 package no.nav.helse
 
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import no.nav.helse.db.Database
 import no.nav.helse.mediator.Mediator
 import no.nav.helse.rapids_rivers.RapidApplication
-import no.nav.helse.rapids_rivers.RapidsConnection
 
 internal fun main() {
     App().start()

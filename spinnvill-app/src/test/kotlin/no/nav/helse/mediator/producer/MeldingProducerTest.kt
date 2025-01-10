@@ -1,8 +1,11 @@
 package no.nav.helse.mediator.producer
 
-import no.nav.helse.*
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
+import no.nav.helse.Arbeidsgiverreferanse
+import no.nav.helse.Fødselsnummer
 import no.nav.helse.helpers.januar
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
+import no.nav.helse.somArbeidsgiverref
+import no.nav.helse.somFnr
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*

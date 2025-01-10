@@ -1,5 +1,6 @@
 package no.nav.helse.mediator
 
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.helse.*
 import no.nav.helse.avviksvurdering.*
@@ -7,7 +8,6 @@ import no.nav.helse.db.Database
 import no.nav.helse.dto.AvviksvurderingDto
 import no.nav.helse.kafka.*
 import no.nav.helse.mediator.producer.*
-import no.nav.helse.rapids_rivers.RapidsConnection
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
@@ -73,7 +73,7 @@ class Mediator(
         avviksvurderinger.håndterNytt(sammenligningsgrunnlag)
         avviksvurderinger.lagre()
 
-        rapidsConnection.queueReplayMessage(fødselsnummer.value, sammenligningsgrunnlagMessage.utkastTilVedtakJson)
+//        rapidsConnection.queueReplayMessage(fødselsnummer.value, sammenligningsgrunnlagMessage.utkastTilVedtakJson)
     }
 
     private fun Grunnlagshistorikk.lagre() {

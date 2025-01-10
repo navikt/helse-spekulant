@@ -1,4 +1,5 @@
-private val rapidsAndRiversVersion = "2024022311041708682651.01821651ed22"
+private val rapidsAndRiversVersion = "2025010715371736260653.d465d681c420"
+private val rapidsAndRiversTestVersion = "2025.01.07-15.40-2be88c00"
 
 group = "no.nav.helse"
 
@@ -10,6 +11,7 @@ dependencies {
     implementation("com.github.navikt:rapids-and-rivers:$rapidsAndRiversVersion")
 
     testImplementation(testFixtures(project(":spinnvill-db")))
+    testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:$rapidsAndRiversTestVersion")
 }
 
 tasks {

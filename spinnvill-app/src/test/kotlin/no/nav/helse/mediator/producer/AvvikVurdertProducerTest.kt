@@ -1,17 +1,17 @@
 package no.nav.helse.mediator.producer
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.github.navikt.tbd_libs.rapids_and_rivers.asYearMonth
+import com.github.navikt.tbd_libs.rapids_and_rivers.isMissingOrNull
 import no.nav.helse.InntektPerMåned
 import no.nav.helse.OmregnetÅrsinntekt
 import no.nav.helse.avviksvurdering.ArbeidsgiverInntekt
+import no.nav.helse.avviksvurdering.Avviksvurdering
 import no.nav.helse.avviksvurdering.Beregningsgrunnlag
 import no.nav.helse.avviksvurdering.Sammenligningsgrunnlag
-import no.nav.helse.avviksvurdering.Avviksvurdering
 import no.nav.helse.helpers.beregningsgrunnlag
 import no.nav.helse.helpers.januar
 import no.nav.helse.helpers.toJson
-import no.nav.helse.rapids_rivers.asYearMonth
-import no.nav.helse.rapids_rivers.isMissingOrNull
 import no.nav.helse.somArbeidsgiverref
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
